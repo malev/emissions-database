@@ -7,12 +7,47 @@
     <h5>Last 3 emissions events reported:</h5>
     <div class="row">
     {% for emission_event in emission_events %}
-      <div class="large-4 medium-4 small-4 columns">
+      <div class="large-4 medium-4 columns">
         <div class="callout panel">
+          <p>Tracking number: <a href="http://www11.tceq.texas.gov/oce/eer/index.cfm?fuseaction=main.getDetails&target={{emission_event.tracking_number}}" target="_blank">{{emission_event.tracking_number}}</a></p>
           <p>Type of emission: {{emission_event.type_of_air_emissions_event}}</p>
           <p>City, County: {{emission_event.city_county}}</p>
           <p>Event began: {{ emission_event.began_date }}</p>
           <p>Regulated Entity: {{emission_event.regulated_entity_name}}</p>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="large-12 columns">
+    <h5>Popular contaminants in 2015</h5>
+    <div class="row">
+    {% for contaminant in contaminants %}
+      <div class="large-4 medium-4 columns">
+        <div class="callout panel">
+          <p>Contaminant: {{ contaminant.contaminant }}</p>
+          <p>Tracking number: <a href="http://www11.tceq.texas.gov/oce/eer/index.cfm?fuseaction=main.getDetails&target={{contaminant.tracking_number}}" target="_blank">{{contaminant.tracking_number}}</a></p>
+          <p>Amount released: {{ contaminant.amount_released }}</p>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="large-12 columns">
+    <h5>Last 6 issued orders</h5>
+    <div class="row">
+    {% for issued_order in issued_orders %}
+      <div class="large-4 medium-4 columns">
+        <div class="callout panel">
+          <p>Docket number: <a href="http://www14.tceq.texas.gov/epic/CIO/{{issued_order.docket_link}}">{{ issued_order.docket_number }}</a></p>
+          <p>Penalty amount: {{ issued_order.penalty_value }}</p>
+          <p>Agenda date: {{ issued_order.agenda_date }}</p>
         </div>
       </div>
     {% endfor %}

@@ -2,15 +2,21 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponse
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
-from models import RegulatedEntity, EmissionEvent
+from models import RegulatedEntity, EmissionEvent, ContaminantReleased, IssuedOrder
 
 # validate len(q) > 2
 
 def home_view(request):
     emission_events = EmissionEvent.objects.order_by('-began_date')[0:3]
+    contaminants = ContaminantReleased.objects.all()[0:6]
+    issued_orders = IssuedOrder.objects.order_by('-agended_at')[0:6]
+
     return render(request, 'home.html', {
-        'emission_events': emission_events
+        'emission_events': emission_events,
+        'contaminants': contaminants,
+        'issued_orders': issued_orders
     })
+
 
 def search_view(request):
     regulated_entities = RegulatedEntity.objects.filter(\
