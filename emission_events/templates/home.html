@@ -6,21 +6,16 @@
   <div class="large-12 columns">
     <h5>Last 3 emissions events reported:</h5>
     <div class="row">
+    {% for emission_event in emission_events %}
       <div class="large-4 medium-4 small-4 columns">
         <div class="callout panel">
-          <p>Four columns</p>
+          <p>Type of emission: {{emission_event.type_of_air_emissions_event}}</p>
+          <p>City, County: {{emission_event.city_county}}</p>
+          <p>Event began: {{ emission_event.began_date }}</p>
+          <p>Regulated Entity: {{emission_event.regulated_entity_name}}</p>
         </div>
       </div>
-      <div class="large-4 medium-4 small-4 columns">
-        <div class="callout panel">
-          <p>Four columns</p>
-        </div>
-      </div>
-      <div class="large-4 medium-4 small-4 columns">
-        <div class="callout panel">
-          <p>Four columns</p>
-        </div>
-      </div>
+    {% endfor %}
     </div>
   </div>
 </div>

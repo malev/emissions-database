@@ -6,6 +6,12 @@ from models import RegulatedEntity, EmissionEvent
 
 # validate len(q) > 2
 
+def home_view(request):
+    emission_events = EmissionEvent.objects.order_by('-began_date')[0:3]
+    return render(request, 'home.html', {
+        'emission_events': emission_events
+    })
+
 def search_view(request):
     regulated_entities = RegulatedEntity.objects.filter(\
         Q(name__icontains=request.GET['q']) |\
