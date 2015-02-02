@@ -53,6 +53,12 @@ For now, we are only focusing on the following emission events:
     EMISSIONS_DATABASE=postgres://malev@localhost:5433/emission_events\
     docker run -e EMISSIONS_DATABASE --rm emissions
 
+## WebApp
+
+    npm install -g bower grunt-cli
+    gem install foundation
+    gem install compass
+
 ## References
 
 * https://www.tceq.texas.gov/assets/public/comm_exec/agendas/comm/backup/Agendas/2014/9-24-2014/1447PST.pdf
