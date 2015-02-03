@@ -1,3 +1,4 @@
+import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponse
 from django.db.models import Q
@@ -7,14 +8,19 @@ from models import RegulatedEntity, EmissionEvent, ContaminantReleased, IssuedOr
 # validate len(q) > 2
 
 def home_view(request):
-    emission_events = EmissionEvent.objects.order_by('-began_date')[0:3]
+    emission_events = EmissionEvent.emissions.filter(began_date__lte=datetime.date.today()).order_by('-began_date')[0:6]
     contaminants = ContaminantReleased.objects.all()[0:6]
     issued_orders = IssuedOrder.objects.order_by('-agended_at')[0:6]
+    regulated_entities = RegulatedEntity.ranked.ranking_per_year()
+
+    print len(regulated_entities)
+    print regulated_entities[0]
 
     return render(request, 'home.html', {
         'emission_events': emission_events,
         'contaminants': contaminants,
-        'issued_orders': issued_orders
+        'issued_orders': issued_orders,
+        'regulated_entities': regulated_entities
     })
 
 

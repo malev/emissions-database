@@ -4,16 +4,17 @@
 
 <div class="row">
   <div class="large-12 columns">
-    <h5>Last 3 emissions events reported:</h5>
+    <h5>Six last emissions events reported:</h5>
     <div class="row">
     {% for emission_event in emission_events %}
       <div class="large-4 medium-4 columns">
         <div class="callout panel">
           <p>Tracking number: <a href="http://www11.tceq.texas.gov/oce/eer/index.cfm?fuseaction=main.getDetails&target={{emission_event.tracking_number}}" target="_blank">{{emission_event.tracking_number}}</a></p>
-          <p>Type of emission: {{emission_event.type_of_air_emissions_event}}</p>
-          <p>City, County: {{emission_event.city_county}}</p>
-          <p>Event began: {{ emission_event.began_date }}</p>
+          <p>Type: {{emission_event.type_of_air_emissions_event|title}}</p>
+          <p>County: {{ emission_event.county|title}}</p>
+          <p>Event began: {{ emission_event.began_date|date:"SHORT_DATE_FORMAT" }}</p>
           <p>Regulated Entity: {{emission_event.regulated_entity_name}}</p>
+          <p>Duration: {{ emission_event.duration|floatformat}}hs.</p>
         </div>
       </div>
     {% endfor %}
@@ -40,7 +41,7 @@
 
 <div class="row">
   <div class="large-12 columns">
-    <h5>Last 6 issued orders</h5>
+    <h5>Six last orders issued</h5>
     <div class="row">
     {% for issued_order in issued_orders %}
       <div class="large-4 medium-4 columns">
@@ -55,4 +56,21 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="large-12 columns">
+    <h5>Plants with more emission events registered in 2015</h5>
+    <div class="row">
+    {% for regulated_entity in regulated_entities %}
+      <div class="large-4 medium-4 columns">
+        <div class="callout panel">
+          <p>Name: {{ regulated_entity.name }}</p>
+          <p>RN: {{ regulated_entity.regulated_entity_rn_number }}</p>
+          <p>County: {{ regulated_entity.county|title }}</p>
+          <p>Emission events: {{ regulated_entity.num_events }}</p>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+</div>
 {% endblock %}
