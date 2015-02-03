@@ -3,74 +3,108 @@
 {% block main %}
 
 <div class="row">
-  <div class="large-12 columns">
-    <h5>Six last emissions events reported:</h5>
-    <div class="row">
-    {% for emission_event in emission_events %}
-      <div class="large-4 medium-4 columns">
-        <div class="callout panel">
-          <p>Tracking number: <a href="http://www11.tceq.texas.gov/oce/eer/index.cfm?fuseaction=main.getDetails&target={{emission_event.tracking_number}}" target="_blank">{{emission_event.tracking_number}}</a></p>
-          <p>Type: {{emission_event.type_of_air_emissions_event|title}}</p>
-          <p>County: {{ emission_event.county|title}}</p>
-          <p>Event began: {{ emission_event.began_date|date:"SHORT_DATE_FORMAT" }}</p>
-          <p>Regulated Entity: {{emission_event.regulated_entity_name}}</p>
-          <p>Duration: {{ emission_event.duration|floatformat}}hs.</p>
-        </div>
-      </div>
-    {% endfor %}
-    </div>
+  <div class="large-6 columns">
+    <h5>Last emissions reported</h5>
+    <table>
+      <thead>
+        <tr>
+          <th>Tracking number</th>
+          <th>County</th>
+          <th>When</th>
+          <th>Regulated Entity</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for emission_event in emission_events %}
+        <tr>
+          <td>
+            <a href="http://www11.tceq.texas.gov/oce/eer/index.cfm?fuseaction=main.getDetails&target={{emission_event.tracking_number}}" target="_blank">{{emission_event.tracking_number}}</a>
+          </td>
+          <td>{{emission_event.type_of_air_emissions_event|title}}</td>
+          <td>{{ emission_event.began_date|date:"SHORT_DATE_FORMAT" }}</td>
+          <td>{{emission_event.regulated_entity_name}}</td>
+          <td>{{ emission_event.duration|floatformat}}hs.</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="large-6 columns">
+    <h5>Contaminants released in 2015</h5>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Tracking number</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for contaminant in contaminants %}
+        <tr>
+          <td>{{ contaminant.contaminant }}</td>
+          <td>
+            <a href="http://www11.tceq.texas.gov/oce/eer/index.cfm?fuseaction=main.getDetails&target={{contaminant.tracking_number}}" target="_blank">{{contaminant.tracking_number}}</a>
+          </td>
+          <td>{{ contaminant.amount_released }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
   </div>
 </div>
 
 <div class="row">
-  <div class="large-12 columns">
-    <h5>Popular contaminants in 2015</h5>
-    <div class="row">
-    {% for contaminant in contaminants %}
-      <div class="large-4 medium-4 columns">
-        <div class="callout panel">
-          <p>Contaminant: {{ contaminant.contaminant }}</p>
-          <p>Tracking number: <a href="http://www11.tceq.texas.gov/oce/eer/index.cfm?fuseaction=main.getDetails&target={{contaminant.tracking_number}}" target="_blank">{{contaminant.tracking_number}}</a></p>
-          <p>Amount released: {{ contaminant.amount_released }}</p>
-        </div>
-      </div>
-    {% endfor %}
-    </div>
+  <div class="large-6 columns">
+    <h5>Last orders issued</h5>
+    <table>
+      <thead>
+        <tr>
+          <th>Regulated Entity</th>
+          <th>Docket number</th>
+          <th>When</th>
+          <th>Penalty</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for issued_order in issued_orders %}
+        <tr>
+          <td>{{ issued_order.regulated_entity_rn_number }}</td>
+          <td>
+            <a href="http://www14.tceq.texas.gov/epic/CIO/{{issued_order.docket_link}}">{{ issued_order.docket_number }}</a>
+          </td>
+          <td>{{ issued_order.agenda_date }}</td>
+          <td>{{ issued_order.penalty_value }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
   </div>
-</div>
-
-<div class="row">
-  <div class="large-12 columns">
-    <h5>Six last orders issued</h5>
-    <div class="row">
-    {% for issued_order in issued_orders %}
-      <div class="large-4 medium-4 columns">
-        <div class="callout panel">
-          <p>Docket number: <a href="http://www14.tceq.texas.gov/epic/CIO/{{issued_order.docket_link}}">{{ issued_order.docket_number }}</a></p>
-          <p>Penalty amount: {{ issued_order.penalty_value }}</p>
-          <p>Agenda date: {{ issued_order.agenda_date }}</p>
-        </div>
-      </div>
-    {% endfor %}
-    </div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="large-12 columns">
+  <div class="large-6 columns">
     <h5>Plants with more emission events registered in 2015</h5>
-    <div class="row">
-    {% for regulated_entity in regulated_entities %}
-      <div class="large-4 medium-4 columns">
-        <div class="callout panel">
-          <p>Name: {{ regulated_entity.name }}</p>
-          <p>RN: {{ regulated_entity.regulated_entity_rn_number }}</p>
-          <p>County: {{ regulated_entity.county|title }}</p>
-          <p>Emission events: {{ regulated_entity.num_events }}</p>
-        </div>
-      </div>
-    {% endfor %}
-    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Zipcode</th>
+          <th>County</th>
+          <th>Number of emissions</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for regulated_entity in regulated_entities %}
+        <tr>
+          <td>{{ regulated_entity.name|title }}</td>
+          <td>{{ regulated_entity.nearest_zipcode }}</td>
+          <td>{{ regulated_entity.county|title }}</td>
+          <td>{{ regulated_entity.num_events }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
   </div>
 </div>
+
 {% endblock %}

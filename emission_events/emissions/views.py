@@ -9,8 +9,8 @@ from models import RegulatedEntity, EmissionEvent, ContaminantReleased, IssuedOr
 
 def home_view(request):
     emission_events = EmissionEvent.emissions.filter(began_date__lte=datetime.date.today()).order_by('-began_date')[0:6]
-    contaminants = ContaminantReleased.objects.all()[0:6]
-    issued_orders = IssuedOrder.objects.order_by('-agended_at')[0:6]
+    contaminants = ContaminantReleased.objects.distinct('tracking_number').all()[0:10]
+    issued_orders = IssuedOrder.objects.order_by('-agended_at')[0:10]
     regulated_entities = RegulatedEntity.ranked.ranking_per_year()
 
     print len(regulated_entities)

@@ -31,6 +31,7 @@ class RegulatedEntitiesManager(models.Manager):
                 emissions_regulatedentity.name,
                 emissions_regulatedentity.county,
                 emissions_regulatedentity.regulated_entity_rn_number,
+                emissions_regulatedentity.nearest_zipcode,
                 count(*) as freq
             from emissions_emissionevent join emissions_regulatedentity
             ON (emissions_regulatedentity.regulated_entity_rn_number = emissions_emissionevent.regulated_entity_rn_number)
@@ -52,8 +53,13 @@ class RegulatedEntitiesManager(models.Manager):
             limit 10""")
         result_list = []
         for row in cursor.fetchall():
-            p = self.model(id=row[0], name=row[1], county=row[2], regulated_entity_rn_number=row[3])
-            p.num_events = row[4]
+            p = self.model(
+                id=row[0],
+                name=row[1],
+                county=row[2],
+                regulated_entity_rn_number=row[3],
+                nearest_zipcode=row[4])
+            p.num_events = row[5]
             result_list.append(p)
 
         return result_list
