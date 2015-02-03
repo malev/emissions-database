@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.db import models
+from managers import EmissionManager, RegulatedEntitiesManager
 
 
 class PageHTML(models.Model):
@@ -17,6 +18,9 @@ class RegulatedEntity(models.Model):
     nearest_city = models.CharField(max_length=30)
     nearest_zipcode = models.CharField(max_length=30)
     physical_location = models.TextField()
+
+    objects = models.Manager()
+    ranked = RegulatedEntitiesManager()
 
     def get_absolute_url(self):
         return reverse('entity_detail', kwargs={'pk': self.pk})
@@ -60,6 +64,10 @@ class EmissionEvent(models.Model):
     # Relations
     page_html = models.ForeignKey(PageHTML)
     regulated_entity = models.ForeignKey(RegulatedEntity, default=None, null=True)
+
+    # Managers
+    emissions = EmissionManager()
+    objects = models.Manager()
 
 
 class ContaminantReleased(models.Model):
