@@ -12,15 +12,25 @@ def home_view(request):
     contaminants = ContaminantReleased.objects.distinct('tracking_number').all()[0:10]
     issued_orders = IssuedOrder.objects.order_by('-agended_at')[0:10]
     regulated_entities = RegulatedEntity.ranked.ranking_per_year()
-
-    print len(regulated_entities)
-    print regulated_entities[0]
+    emissions_per_year = [
+        EmissionEvent.emissions.emissions_per_year(2008),
+        EmissionEvent.emissions.emissions_per_year(2009),
+        EmissionEvent.emissions.emissions_per_year(2010),
+        EmissionEvent.emissions.emissions_per_year(2011),
+        EmissionEvent.emissions.emissions_per_year(2012),
+        EmissionEvent.emissions.emissions_per_year(2013),
+        EmissionEvent.emissions.emissions_per_year(2014),
+        EmissionEvent.emissions.emissions_per_year(2015)
+    ]
+    emissions_per_year_and_month = EmissionEvent.emissions.emissions_per_year_and_month()
 
     return render(request, 'home.html', {
         'emission_events': emission_events,
         'contaminants': contaminants,
         'issued_orders': issued_orders,
-        'regulated_entities': regulated_entities
+        'regulated_entities': regulated_entities,
+        'emissions_per_year': emissions_per_year,
+        'emissions_count': emissions_per_year_and_month
     })
 
 

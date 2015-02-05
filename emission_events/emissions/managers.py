@@ -8,7 +8,38 @@ class EmissionQuerySet(models.QuerySet):
 
 
 class EmissionManager(models.Manager):
-     def get_queryset(self):
+    def emissions_per_year_and_month(self):
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT
+                DATE_PART('YEAR', began_date) as Year,
+                DATE_PART('MONTH', began_date) as Month,
+                COUNT(*) as Entries
+            FROM emissions_emissionevent
+            GROUP BY Year, Month""")
+
+        output = {}
+        for row in cursor.fetchall():
+            year = str(int(row[0]))
+            month = str(int(row[1]))
+            if year in output:
+                output[year][month] = int(row[2])
+            else:
+                output[year] = {month: int(row[2])}
+        return output
+
+    def emissions_per_year(self, year):
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT count(*)
+            FROM emissions_emissionevent
+            WHERE emissions_emissionevent.began_date >='%i-01-01'
+            AND emissions_emissionevent.began_date <= '%i-12-31'
+            """ % (year, year))
+        return int(cursor.fetchall()[0][0])
+
+
+    def get_queryset(self):
         type_of_emissions = [
             'air-shutdown',
             'air-startup',
