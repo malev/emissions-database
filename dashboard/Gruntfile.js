@@ -3,17 +3,21 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    paths: {
+      bower: 'bower_components/',
+      dest: '../emission_events/static/js/'
+    },
     concat: {
       options: {
         separator: ';',
       },
       dist: {
         src: [
-          'bower_components/jquery/dist/jquery.js',
-          'bower_components/foundation/js/foundation.js',
-          'bower_components/chartjs/Chart.js'
+          '<%= paths.bower %>jquery/dist/jquery.js',
+          '<%= paths.bower %>foundation/js/foundation.js',
+          '<%= paths.bower %>chartjs/Chart.js'
         ],
-        dest: '../emission_events/static/js/vendor.js',
+        dest: '<%= paths.dest %>vendor.js',
       },
     },
     uglify: {
